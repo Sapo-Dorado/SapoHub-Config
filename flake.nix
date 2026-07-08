@@ -34,7 +34,19 @@
       mkHost = hostname: _hostArgs: sapohub.lib.mkFreshMachine {
         inherit hostname sshKey system modules depsHash npmDepsHash;
         hardwareDir = ./hardware;
-        extraNixosModules = [ ./sapohub-prefs.nix ];
+        extraNixosModules = [
+          ./sapohub-prefs.nix
+          {
+            # Explicit, hand-written config — wins over anything synced
+            # into sapohub-prefs.nix from the Settings UI (that file's
+            # values are wrapped in lib.mkDefault by `sapohub-deploy
+            # --sync-prefs`). "preview" is My Plate's one non-default
+            # dashboard_buttons option (MyPlateWeb.TaskPreview); leaving
+            # this pref unset falls back to the module's built-in
+            # icon+title default tile.
+            services.sapohub.prefs."dashboard_button.my_plate" = "preview";
+          }
+        ];
       };
 
       built = sapohub.lib.mkSapoHub { inherit system modules depsHash npmDepsHash; };
@@ -65,6 +77,7 @@
             package = lib.mkDefault built.package;
             cliPackage = lib.mkDefault built.cli;
             assistant.claudePackage = lib.mkDefault flakePkgs.claude-code;
+            prefs."dashboard_button.my_plate" = lib.mkDefault "preview";
           };
           nixpkgs.config.allowUnfree = lib.mkDefault true;
         };
