@@ -16,6 +16,8 @@
   outputs = { self, sapohub, ... }:
     let
       system = "x86_64-linux";
+      nixpkgs = sapohub.inputs.nixpkgs;
+      claude-code-nix = sapohub.inputs.claude-code-nix;
 
       modules = [
         sapohub.sapohubModules.my_plate
@@ -40,21 +42,31 @@
     {
       nixosConfigurations = builtins.mapAttrs mkHost hosts;
 
-      # Import into an EXISTING NixOS config instead of using
-      # nixosConfigurations above (which owns disk/hardware/bootloader —
-      # only appropriate for a fresh machine). Everything under
-      # `services.sapohub.*` (host, port, secretsFile, prefs, deploy,
-      # assistant.*, agentNotes — see SapoHub-2.0's
-      # nix/nixos-module.nix for the full list) still works normally;
-      # this module only pins the module set (my_plate) as a default,
-      # so setting anything else on services.sapohub still wins over
-      # what's here.
-      nixosModules.default = { lib, ... }: {
-        imports = [ sapohub.nixosModules.default ./sapohub-prefs.nix ];
-        services.sapohub = {
-          package = lib.mkDefault built.package;
-          cliPackage = lib.mkDefault built.cli;
+      # Import into an EXISTING NixOS config — needs nothing beyond
+      # `imports = [ sapohub-config.nixosModules.default ];`. This only sets
+      # what's actually specific to this repo (module selection, the
+      # unfree claude-code overlay wiring); secretsFile and
+      # deploy.flakePath already have sensible defaults in SapoHub-2.0's
+      # own module. `deploy.flakeAttr` has no universal default (it's
+      # whatever the importing config calls its own host), so the
+      # importing config still needs to set that one directly.
+      nixosModules.default = { pkgs, lib, ... }:
+        let
+          flakePkgs = import nixpkgs {
+            inherit (pkgs) system;
+            config.allowUnfree = true;
+            overlays = [ claude-code-nix.overlays.default ];
+          };
+        in
+        {
+          imports = [ sapohub.nixosModules.default ./sapohub-prefs.nix ];
+          services.sapohub = {
+            enable = lib.mkDefault true;
+            package = lib.mkDefault built.package;
+            cliPackage = lib.mkDefault built.cli;
+            assistant.claudePackage = lib.mkDefault flakePkgs.claude-code;
+          };
+          nixpkgs.config.allowUnfree = lib.mkDefault true;
         };
-      };
     };
 }

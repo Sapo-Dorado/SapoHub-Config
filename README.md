@@ -4,40 +4,88 @@ My personal SapoHub deployment config. Modules enabled: `my_plate`
 (todo) only — everything else is [SapoHub-2.0](https://github.com/Sapo-Dorado/SapoHub-2.0)'s
 defaults.
 
-## Before deploying
+There are two ways to deploy this: bootstrap a fresh machine from
+scratch (script-driven, wipes the target disk), or import this repo's
+`nixosModules.default` into a NixOS config you already maintain. Both
+end up running the same `services.sapohub` module; they just differ in
+who owns the disk/filesystem/bootloader config.
 
-1. Set `sshKey` in `flake.nix` to your own SSH public key.
-2. Resolve the placeholder `depsHash`/`npmDepsHash` in `flake.nix` — run
-   a build, nix will report the correct hash on a mismatch:
+## Before deploying (either path)
+
+1. Set `sshKey` in `flake.nix` to your own SSH public key (used for root
+   SSH access on any fresh-machine host — not needed for the
+   existing-config path, since you already have access to that machine).
+2. Resolve the placeholder `depsHash`/`npmDepsHash` in `flake.nix` if you
+   change the `modules` list — run a build, nix reports the correct hash
+   on a mismatch:
    ```sh
-   nix build .#nixosConfigurations.hub.config.system.build.toplevel
+   nix build .#nixosConfigurations.test.config.system.build.toplevel
    ```
    Paste the reported hash in, repeat for the second one if it also
    mismatches.
-3. Prepare a `SECRET_KEY_BASE` (or let the bootstrap process generate
-   one for you — see below) for `/etc/sapohub/secrets.env` on the
-   target.
+3. Prepare a `SECRET_KEY_BASE` (or let the bootstrap script generate one
+   for you — see below) for `/etc/sapohub/secrets.env` on the target.
 
-## Deploying
+## Path 1: fresh machine (nixos-anywhere)
 
-This flake is self-contained and deployable the same way SapoHub-2.0's
-own `nixosConfigurations.fresh-machine` example is: disko disk layout +
-a hardware config generated per-machine (not hand-written) + Tailscale
-(no public exposure) + `services.sapohub`.
+Each host gets its own entry in the `hosts` attrset in `flake.nix` (the
+attribute name is also the `nixosConfigurations` name and the prefix for
+that host's generated hardware files). There's one host, `test`, to
+start with — add more by adding entries to `hosts` and re-running the
+bootstrap for each.
 
-Point a nixos-anywhere run at this repo's `#hub` attribute — see
-[SapoHub-2.0/scripts/bootstrap.sh](https://github.com/Sapo-Dorado/SapoHub-2.0/blob/main/scripts/bootstrap.sh)
-for the exact invocation shape (`--generate-hardware-config` for
-hardware-agnostic bootstrap, `--extra-files` for seeding secrets/a
-Tailscale auth key before first boot). That script currently targets
-SapoHub-2.0's own bundled example flake rather than an arbitrary config
-repo like this one — either adapt a local copy of it to point here, or
-run the underlying `nix run github:nix-community/nixos-anywhere -- ...`
-command directly against this repo's flake with the same flags.
+From a checkout of [SapoHub-2.0](https://github.com/Sapo-Dorado/SapoHub-2.0):
+
+```sh
+./scripts/bootstrap.sh <ip> --hostname test --flake-path /path/to/this/repo
+```
+
+This SSHes into the target (must be booted into a NixOS installer ISO),
+generates `hardware/test-hardware-configuration.nix` and
+`hardware/test-disk-device.nix` here, partitions the disk via disko,
+seeds secrets and (optionally) a Tailscale auth key, installs, commits
+and pushes the generated hardware files back into this repo, and clones
+this repo onto the target at `/etc/sapohub-config` so future redeploys
+have a real config to rebuild from. See `bootstrap.sh --help` and its
+own comments for every flag (`--disk`, `--secrets-file`,
+`--tailscale-auth-key-file`, `--no-commit`, `--ssh-user`).
+
+For a new host, add it to `hosts` in `flake.nix` first, then bootstrap
+with `--hostname <that-name>`.
+
+## Path 2: add to an existing NixOS config
+
+If you already run NixOS somewhere and just want SapoHub added to that
+config, import this repo's module — no `services.sapohub = { ... }`
+block required:
+
+```nix
+# in your existing flake.nix
+inputs.sapohub-config.url = "github:Sapo-Dorado/SapoHub-Config";
+
+# in your existing nixosConfigurations.<your-host>
+modules = [
+  sapohub-config.nixosModules.default
+  { services.sapohub.deploy.flakeAttr = "<your-host>"; }
+  # ...your existing modules (fileSystems, boot.loader, hardware, etc.)
+];
+```
+
+`deploy.flakeAttr` is the one thing you must set yourself — it has to
+match whatever you called your own `nixosConfigurations` attribute, so
+there's no way for the module to guess it. Everything else (module
+selection, secrets path, deploy target path, the unfree `claude-code`
+package) is already wired up by this repo's module and SapoHub-2.0's own
+defaults. Any of it can still be overridden by setting
+`services.sapohub.*` directly in your config, same as always.
+
+Then `nixos-rebuild switch --flake .#<your-host>` however you normally
+deploy your own config.
 
 ## Updating
 
-Once deployed, `/etc/sapohub-config` on the target is a checkout of this
-repo (`services.sapohub.deploy.flakePath`). SSH in and run
-`sapohub-deploy`, or use the Settings page's Deploy button (which also
-syncs UI preferences from Settings back into `sapohub-prefs.nix` here).
+Once deployed (either path), `/etc/sapohub-config` on the target is a
+checkout of this repo (`services.sapohub.deploy.flakePath`). SSH in and
+run `sapohub-deploy`, or use the Settings page's Deploy button (which
+also syncs UI preferences from Settings back into `sapohub-prefs.nix`
+here).
