@@ -27,6 +27,18 @@
 
       sshKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJDOm17LfZVvLbzE+buuBRtK3FVQsBul2R4C+zLE+HSK sapo-hub";
 
+      # Explicit, hand-written prefs — single source of truth, referenced
+      # by both nixosConfigurations.<host> below and nixosModules.default.
+      # Wins over anything synced into sapohub-prefs.nix from the Settings
+      # UI (that file's values are wrapped in lib.mkDefault by
+      # `sapohub-deploy --sync-prefs`). "preview" is My Plate's one
+      # non-default dashboard_buttons option (MyPlateWeb.TaskPreview);
+      # leaving a pref unset falls back to the module's built-in
+      # icon+title default tile.
+      prefs = {
+        "dashboard_button.my_plate" = "preview";
+      };
+
       hosts = {
         test = { };
       };
@@ -36,16 +48,7 @@
         hardwareDir = ./hardware;
         extraNixosModules = [
           ./sapohub-prefs.nix
-          {
-            # Explicit, hand-written config — wins over anything synced
-            # into sapohub-prefs.nix from the Settings UI (that file's
-            # values are wrapped in lib.mkDefault by `sapohub-deploy
-            # --sync-prefs`). "preview" is My Plate's one non-default
-            # dashboard_buttons option (MyPlateWeb.TaskPreview); leaving
-            # this pref unset falls back to the module's built-in
-            # icon+title default tile.
-            services.sapohub.prefs."dashboard_button.my_plate" = "preview";
-          }
+          { services.sapohub.prefs = prefs; }
         ];
       };
 
@@ -77,7 +80,7 @@
             package = lib.mkDefault built.package;
             cliPackage = lib.mkDefault built.cli;
             assistant.claudePackage = lib.mkDefault flakePkgs.claude-code;
-            prefs."dashboard_button.my_plate" = lib.mkDefault "preview";
+            prefs = lib.mapAttrs (_: lib.mkDefault) prefs;
           };
           nixpkgs.config.allowUnfree = lib.mkDefault true;
         };
