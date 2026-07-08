@@ -1,10 +1,8 @@
-# Fallback hardware configuration — see SapoHub-2.0's own
-# hardware/example-hardware-configuration.nix for the full explanation.
-# In short: DO NOT deploy with this file directly. A real bootstrap run
-# (nixos-anywhere --generate-hardware-config) generates
-# hardware/generated-hardware-configuration.nix instead, which flake.nix
-# prefers automatically if present. This file only exists so the flake
-# evaluates cleanly before that's ever been run.
+# Fallback hardware config, used until a real one exists for a given
+# hostname. DO NOT deploy with this file directly — bootstrapping a host
+# generates hardware/<hostname>-hardware-configuration.nix instead, which
+# takes priority automatically. This just lets the flake evaluate before
+# that's ever been run.
 { lib, modulesPath, ... }:
 
 {

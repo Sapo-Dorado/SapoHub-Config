@@ -1,7 +1,6 @@
-# Fallback disk device — see SapoHub-2.0's own
-# hardware/example-disk-device.nix for the full explanation. A real
-# bootstrap run writes hardware/generated-disk-device.nix instead, which
-# flake.nix prefers automatically if present.
+# Fallback disk device, used until a real one exists for a given
+# hostname. Bootstrapping a host writes hardware/<hostname>-disk-device.nix
+# instead, which takes priority automatically.
 {
   sapohubDiskDevice = "/dev/sda";
 }
