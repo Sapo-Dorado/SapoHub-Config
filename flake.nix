@@ -86,6 +86,10 @@
             cliPackage = lib.mkDefault built.cli;
             assistant.claudePackage = lib.mkDefault flakePkgs.claude-code;
             prefs = lib.mapAttrs (_: lib.mkDefault) prefs;
+            # Off by default here (an existing machine keeps its own
+            # networking) — opt in explicitly if wanted:
+            #   tailscale.enable = lib.mkDefault true;
+            #   tailscale.authKeyFile = lib.mkDefault "/etc/sapohub/tailscale-authkey";
           };
           nixpkgs.config.allowUnfree = lib.mkDefault true;
         };
