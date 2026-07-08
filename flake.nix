@@ -34,8 +34,27 @@
         hardwareDir = ./hardware;
         extraNixosModules = [ ./sapohub-prefs.nix ];
       };
+
+      built = sapohub.lib.mkSapoHub { inherit system modules depsHash npmDepsHash; };
     in
     {
       nixosConfigurations = builtins.mapAttrs mkHost hosts;
+
+      # Import into an EXISTING NixOS config instead of using
+      # nixosConfigurations above (which owns disk/hardware/bootloader —
+      # only appropriate for a fresh machine). Everything under
+      # `services.sapohub.*` (host, port, secretsFile, prefs, deploy,
+      # assistant.*, agentNotes — see SapoHub-2.0's
+      # nix/nixos-module.nix for the full list) still works normally;
+      # this module only pins the module set (my_plate) as a default,
+      # so setting anything else on services.sapohub still wins over
+      # what's here.
+      nixosModules.default = { lib, ... }: {
+        imports = [ sapohub.nixosModules.default ./sapohub-prefs.nix ];
+        services.sapohub = {
+          package = lib.mkDefault built.package;
+          cliPackage = lib.mkDefault built.cli;
+        };
+      };
     };
 }
