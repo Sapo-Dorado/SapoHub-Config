@@ -31,12 +31,17 @@
       # by both nixosConfigurations.<host> below and nixosModules.default.
       # Wins over anything synced into sapohub-prefs.nix from the Settings
       # UI (that file's values are wrapped in lib.mkDefault by
-      # `sapohub-deploy --sync-prefs`). "preview" is My Plate's one
-      # non-default dashboard_buttons option (MyPlateWeb.TaskPreview);
-      # leaving a pref unset falls back to the module's built-in
-      # icon+title default tile.
+      # `sapohub-deploy --sync-prefs`).
       prefs = {
+        # "preview" is My Plate's one non-default dashboard_buttons option
+        # (MyPlateWeb.TaskPreview); leaving this unset falls back to the
+        # module's built-in icon+title default tile.
         "dashboard_button.my_plate" = "preview";
+        # Only show My Plate's "due today" count in the statusline —
+        # drops the built-in core.scheduler/core.snapshot items. Unset
+        # would fall back to showing every item (see
+        # SapoCore.Statusline for the full fallback rule).
+        "statusline_order" = "my_plate.due";
       };
 
       hosts = {
