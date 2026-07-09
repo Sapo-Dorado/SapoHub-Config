@@ -1,0 +1,3 @@
+{
+  sapohubDiskDevice = "/dev/sda";
+}
