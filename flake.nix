@@ -1,4 +1,4 @@
-# Personal SapoHub config — my_plate (todo) only, everything else default.
+# Personal SapoHub config — my_plate (todo) and storage, everything else default.
 #
 # Bootstrap a machine with:
 #   <path-to-SapoHub-2.0>/scripts/bootstrap.sh <ip> --hostname <name> --flake-path .
@@ -7,7 +7,7 @@
 # gets its own hardware/<hostname>-{hardware-configuration,disk-device}.nix,
 # generated on first bootstrap.
 {
-  description = "My SapoHub config — my_plate only";
+  description = "My SapoHub config — my_plate and storage";
 
   inputs = {
     sapohub.url = "github:Sapo-Dorado/SapoHub-2.0";
@@ -21,6 +21,7 @@
 
       modules = [
         sapohub.sapohubModules.my_plate
+        sapohub.sapohubModules.storage
       ];
       depsHash = "sha256-2gMs2ZCx1FHah25Zm/vYlSt5TQEZyZ92jHd3u1o6iW4=";
       npmDepsHash = "sha256-iHOJ/cXZOsPeEnKaDBYbEj7ClLpJ5hbmrZwnLmTvrdU=";
