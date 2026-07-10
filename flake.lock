@@ -119,11 +119,11 @@
         "nixpkgs-tools": "nixpkgs-tools"
       },
       "locked": {
-        "lastModified": 1783719202,
-        "narHash": "sha256-ba1wtoomGeH2mAwcTCc8sBcX3wHdhOQRvMeL7W4ERnc=",
+        "lastModified": 1783719689,
+        "narHash": "sha256-b6/1Q63q7li0hXaSSLsiWX8YYPqKJRjcOaHMzq7SZq8=",
         "owner": "Sapo-Dorado",
         "repo": "SapoHub-2.0",
-        "rev": "50d02d802b578bc5a8cdc165eaceb0a23de73a0b",
+        "rev": "45a92beba79c78886ed849b73a65a1378fcee1dc",
         "type": "github"
       },
       "original": {
