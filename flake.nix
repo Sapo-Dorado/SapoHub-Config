@@ -23,7 +23,7 @@
         sapohub.sapohubModules.my_plate
         sapohub.sapohubModules.storage
       ];
-      depsHash = "sha256-2gMs2ZCx1FHah25Zm/vYlSt5TQEZyZ92jHd3u1o6iW4=";
+      depsHash = "sha256-xNO7J5/zhUsQF2Wu1uhuemj0GnjXc77fG4i4pADTx9w=";
       npmDepsHash = "sha256-iHOJ/cXZOsPeEnKaDBYbEj7ClLpJ5hbmrZwnLmTvrdU=";
 
       sshKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJDOm17LfZVvLbzE+buuBRtK3FVQsBul2R4C+zLE+HSK sapo-hub";
@@ -55,6 +55,9 @@
         extraNixosModules = [
           ./sapohub-prefs.nix
           { services.sapohub.prefs = prefs; }
+          # DB always stores/queries UTC — this only affects how times
+          # render in the UI (statusline clock, deploy timestamps, etc).
+          { services.sapohub.timezone = "America/Los_Angeles"; }
         ];
       };
 
@@ -87,6 +90,7 @@
             cliPackage = lib.mkDefault built.cli;
             assistant.claudePackage = lib.mkDefault flakePkgs.claude-code;
             prefs = lib.mapAttrs (_: lib.mkDefault) prefs;
+            timezone = lib.mkDefault "America/Los_Angeles";
             # Off by default here (an existing machine keeps its own
             # networking) — opt in explicitly if wanted:
             #   tailscale.enable = lib.mkDefault true;
