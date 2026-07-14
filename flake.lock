@@ -150,11 +150,11 @@
     },
     "personal-modules": {
       "locked": {
-        "lastModified": 1784008134,
-        "narHash": "sha256-UOd+WmfvI80ysOMjbhfGastFMbn1Bi33zvHbc4IL+4o=",
+        "lastModified": 1784008701,
+        "narHash": "sha256-Tu3gc9GHRBJGbzCMgsJqa6yNeI/6ZUvygy2O8d++/1U=",
         "owner": "Sapo-Dorado",
         "repo": "PersonalModules",
-        "rev": "f8754c73acf659f0a1ea15e3b85e97cebc5a159b",
+        "rev": "e34c7cfce098cd9d2d7b89561e2bdd8eb4192cb1",
         "type": "github"
       },
       "original": {
