@@ -2,8 +2,8 @@
   "nodes": {
     "claude-code-nix": {
       "inputs": {
-        "flake-utils": "flake-utils",
-        "nixpkgs": "nixpkgs"
+        "flake-utils": "flake-utils_2",
+        "nixpkgs": "nixpkgs_2"
       },
       "locked": {
         "lastModified": 1783545757,
@@ -58,18 +58,36 @@
         "type": "github"
       }
     },
+    "flake-utils_2": {
+      "inputs": {
+        "systems": "systems_2"
+      },
+      "locked": {
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1783279667,
-        "narHash": "sha256-/NAkDSsve+GNM0Bt6tleJdCGfsTlK89nPjkVOzZMo0s=",
+        "lastModified": 1778443072,
+        "narHash": "sha256-zi7/fsqM/kFdNuED//4WOCUtezGtKKqRNORjMvfwjnA=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "f205b5574fd0cb7da5b702a2da51507b7f4fdd1b",
+        "rev": "da5ad661ba4e5ef59ba743f0d112cbc30e474f32",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
-        "ref": "nixpkgs-unstable",
+        "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -92,6 +110,22 @@
     },
     "nixpkgs_2": {
       "locked": {
+        "lastModified": 1783279667,
+        "narHash": "sha256-/NAkDSsve+GNM0Bt6tleJdCGfsTlK89nPjkVOzZMo0s=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "f205b5574fd0cb7da5b702a2da51507b7f4fdd1b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_3": {
+      "locked": {
         "lastModified": 1780336545,
         "narHash": "sha256-vhVhuXzFrIOfcssC/9hDHx7MHzDKjF3keHuREOQqQiQ=",
         "owner": "NixOS",
@@ -106,26 +140,65 @@
         "type": "github"
       }
     },
+    "personal-modules": {
+      "inputs": {
+        "print-proxy-prep": "print-proxy-prep"
+      },
+      "locked": {
+        "lastModified": 1784065875,
+        "narHash": "sha256-veK9DqxAb50/NO/ba6DNNXW6xiGdHLqt3wFPPLDeInQ=",
+        "ref": "refs/heads/main",
+        "rev": "73673bc2787c29e466818f3a6f24b5456e599001",
+        "revCount": 6,
+        "type": "git",
+        "url": "ssh://git@github.com/Sapo-Dorado/PersonalModules"
+      },
+      "original": {
+        "owner": "Sapo-Dorado",
+        "repo": "PersonalModules",
+        "type": "github"
+      }
+    },
+    "print-proxy-prep": {
+      "inputs": {
+        "flake-utils": "flake-utils",
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1781204591,
+        "narHash": "sha256-Lu5/fvy6lnZKaehj4VSHTe9Xu/m5cI6ChJHo5enG+rw=",
+        "owner": "Sapo-Dorado",
+        "repo": "print-proxy-prep",
+        "rev": "3c07cccc8e3c63ae790520903f0a39ac7d15cda6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Sapo-Dorado",
+        "repo": "print-proxy-prep",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
-        "sapohub": "sapohub",
-        "personal-modules": "personal-modules"
+        "personal-modules": "personal-modules",
+        "sapohub": "sapohub"
       }
     },
     "sapohub": {
       "inputs": {
         "claude-code-nix": "claude-code-nix",
         "disko": "disko",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs_3",
         "nixpkgs-tools": "nixpkgs-tools"
       },
       "locked": {
-        "lastModified": 1784006384,
-        "narHash": "sha256-JHZuy3uKCyRjiCi97kAhi8YzfCmqqMT0JcVfIbdN//M=",
-        "owner": "Sapo-Dorado",
-        "repo": "SapoHub-2.0",
-        "rev": "857d67cbe31d30429a32f2d9222f3e4aa76381c3",
-        "type": "github"
+        "lastModified": 1784065865,
+        "narHash": "sha256-jJVPqxYPSzkPsJ2UuGsn3+OoGTC0F2+PrRqUbIQLlXQ=",
+        "ref": "refs/heads/main",
+        "rev": "afde8c94879f6ce04e647cbf1247a845666fb4b6",
+        "revCount": 76,
+        "type": "git",
+        "url": "ssh://git@github.com/Sapo-Dorado/SapoHub-2.0"
       },
       "original": {
         "owner": "Sapo-Dorado",
@@ -148,18 +221,18 @@
         "type": "github"
       }
     },
-    "personal-modules": {
+    "systems_2": {
       "locked": {
-        "lastModified": 1784008701,
-        "narHash": "sha256-Tu3gc9GHRBJGbzCMgsJqa6yNeI/6ZUvygy2O8d++/1U=",
-        "owner": "Sapo-Dorado",
-        "repo": "PersonalModules",
-        "rev": "e34c7cfce098cd9d2d7b89561e2bdd8eb4192cb1",
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
         "type": "github"
       },
       "original": {
-        "owner": "Sapo-Dorado",
-        "repo": "PersonalModules",
+        "owner": "nix-systems",
+        "repo": "default",
         "type": "github"
       }
     }
