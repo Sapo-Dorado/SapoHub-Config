@@ -1,4 +1,5 @@
-# Personal SapoHub config — my_plate (todo) and storage, everything else default.
+# Personal SapoHub config — my_plate, storage, and the personal-modules
+# repo's magic_proxies + youtube_download, everything else default.
 #
 # Bootstrap a machine with:
 #   <path-to-SapoHub-2.0>/scripts/bootstrap.sh <ip> --hostname <name> --flake-path .
@@ -7,13 +8,18 @@
 # gets its own hardware/<hostname>-{hardware-configuration,disk-device}.nix,
 # generated on first bootstrap.
 {
-  description = "My SapoHub config — my_plate and storage";
+  description = "My SapoHub config — my_plate, storage, magic_proxies, youtube_download";
 
   inputs = {
     sapohub.url = "github:Sapo-Dorado/SapoHub-2.0";
+    # PersonalModules is a private repo — the github: fetcher needs an
+    # authenticated API call (401/404 without one) and no GitHub token is
+    # configured for nix's own fetcher here, so fetch over SSH instead
+    # (same deploy key already used for git operations on this box).
+    personal-modules.url = "git+ssh://git@github.com/Sapo-Dorado/PersonalModules";
   };
 
-  outputs = { self, sapohub, ... }:
+  outputs = { self, sapohub, personal-modules, ... }:
     let
       system = "x86_64-linux";
       nixpkgs = sapohub.inputs.nixpkgs;
@@ -22,6 +28,8 @@
       modules = [
         sapohub.sapohubModules.my_plate
         sapohub.sapohubModules.storage
+        personal-modules.sapohubModules.magic_proxies
+        personal-modules.sapohubModules.youtube_download
       ];
       depsHash = "sha256-xNO7J5/zhUsQF2Wu1uhuemj0GnjXc77fG4i4pADTx9w=";
       npmDepsHash = "sha256-iHOJ/cXZOsPeEnKaDBYbEj7ClLpJ5hbmrZwnLmTvrdU=";

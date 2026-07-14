@@ -106,8 +106,24 @@
         "type": "github"
       }
     },
+    "personal-modules": {
+      "locked": {
+        "lastModified": 1783987435,
+        "narHash": "sha256-BdFbfQXG5+MQHPDw4oorzte9QVYHXrxekaNU7TyspeY=",
+        "ref": "refs/heads/main",
+        "rev": "293e3430cd96860065e08e4f7b41e4986839eed6",
+        "revCount": 1,
+        "type": "git",
+        "url": "ssh://git@github.com/Sapo-Dorado/PersonalModules"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@github.com/Sapo-Dorado/PersonalModules"
+      }
+    },
     "root": {
       "inputs": {
+        "personal-modules": "personal-modules",
         "sapohub": "sapohub"
       }
     },
