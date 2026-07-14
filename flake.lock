@@ -110,15 +110,15 @@
       "locked": {
         "lastModified": 1783987435,
         "narHash": "sha256-BdFbfQXG5+MQHPDw4oorzte9QVYHXrxekaNU7TyspeY=",
-        "ref": "refs/heads/main",
+        "owner": "Sapo-Dorado",
+        "repo": "PersonalModules",
         "rev": "293e3430cd96860065e08e4f7b41e4986839eed6",
-        "revCount": 1,
-        "type": "git",
-        "url": "ssh://git@github.com/Sapo-Dorado/PersonalModules"
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "ssh://git@github.com/Sapo-Dorado/PersonalModules"
+        "owner": "Sapo-Dorado",
+        "repo": "PersonalModules",
+        "type": "github"
       }
     },
     "root": {
@@ -135,11 +135,11 @@
         "nixpkgs-tools": "nixpkgs-tools"
       },
       "locked": {
-        "lastModified": 1783983343,
-        "narHash": "sha256-mJ41Zttjzt53C3y4Fkj0gZPNtNitwE8/YotVOpj7GHM=",
+        "lastModified": 1783996755,
+        "narHash": "sha256-/9ppHU1qdX0qGPO9O83c4ujiEyr0c/O1UdgSYnwdfd0=",
         "owner": "Sapo-Dorado",
         "repo": "SapoHub-2.0",
-        "rev": "9ab62ba541092ea4147d16d2ad0c8b3b8f8675e7",
+        "rev": "83da271189fdfe3698c0fad0bdf85f7409301cca",
         "type": "github"
       },
       "original": {
