@@ -147,11 +147,10 @@
       "locked": {
         "lastModified": 1784065875,
         "narHash": "sha256-veK9DqxAb50/NO/ba6DNNXW6xiGdHLqt3wFPPLDeInQ=",
-        "ref": "refs/heads/main",
+        "owner": "Sapo-Dorado",
+        "repo": "PersonalModules",
         "rev": "73673bc2787c29e466818f3a6f24b5456e599001",
-        "revCount": 6,
-        "type": "git",
-        "url": "ssh://git@github.com/Sapo-Dorado/PersonalModules"
+        "type": "github"
       },
       "original": {
         "owner": "Sapo-Dorado",
@@ -194,11 +193,10 @@
       "locked": {
         "lastModified": 1784065865,
         "narHash": "sha256-jJVPqxYPSzkPsJ2UuGsn3+OoGTC0F2+PrRqUbIQLlXQ=",
-        "ref": "refs/heads/main",
+        "owner": "Sapo-Dorado",
+        "repo": "SapoHub-2.0",
         "rev": "afde8c94879f6ce04e647cbf1247a845666fb4b6",
-        "revCount": 76,
-        "type": "git",
-        "url": "ssh://git@github.com/Sapo-Dorado/SapoHub-2.0"
+        "type": "github"
       },
       "original": {
         "owner": "Sapo-Dorado",
