@@ -13,10 +13,14 @@
   inputs = {
     sapohub.url = "github:Sapo-Dorado/SapoHub-2.0";
     # PersonalModules is a private repo — the github: fetcher needs an
-    # authenticated API call (401/404 without one) and no GitHub token is
-    # configured for nix's own fetcher here, so fetch over SSH instead
-    # (same deploy key already used for git operations on this box).
-    personal-modules.url = "git+ssh://git@github.com/Sapo-Dorado/PersonalModules";
+    # authenticated API call. sapohub-deploy now forwards GITHUB_TOKEN
+    # (from the target machine's root-only secrets file) into Nix's
+    # access-tokens config before running nixos-rebuild switch, so this
+    # works the same way on the real deploy host as it does anywhere else
+    # a GITHUB_TOKEN is configured for nix. (git+ssh:// was tried first,
+    # but that needs a real SSH identity/known_hosts for root/nix-daemon
+    # on the target machine, which isn't provisioned there.)
+    personal-modules.url = "github:Sapo-Dorado/PersonalModules";
   };
 
   outputs = { self, sapohub, personal-modules, ... }:
