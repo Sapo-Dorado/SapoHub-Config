@@ -108,7 +108,8 @@
     },
     "root": {
       "inputs": {
-        "sapohub": "sapohub"
+        "sapohub": "sapohub",
+        "personal-modules": "personal-modules"
       }
     },
     "sapohub": {
@@ -144,6 +145,21 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "personal-modules": {
+      "locked": {
+        "lastModified": 1783987435,
+        "narHash": "sha256-BdFbfQXG5+MQHPDw4oorzte9QVYHXrxekaNU7TyspeY=",
+        "owner": "Sapo-Dorado",
+        "repo": "PersonalModules",
+        "rev": "293e3430cd96860065e08e4f7b41e4986839eed6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Sapo-Dorado",
+        "repo": "PersonalModules",
         "type": "github"
       }
     }

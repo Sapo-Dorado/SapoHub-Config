@@ -12,18 +12,16 @@
 
   inputs = {
     sapohub.url = "github:Sapo-Dorado/SapoHub-2.0";
+    # PersonalModules is a private repo — the github: fetcher needs an
+    # authenticated API call. sapohub-deploy forwards GITHUB_TOKEN (from
+    # the target machine's root-only secrets file) into Nix's
+    # access-tokens config before running nixos-rebuild switch, so this
+    # is authenticated on the real deploy host the same way it would be
+    # anywhere else a GITHUB_TOKEN is configured for nix.
+    personal-modules.url = "github:Sapo-Dorado/PersonalModules";
   };
 
-  # TEMPORARY: personal-modules (magic_proxies, youtube_download) is
-  # dropped for exactly one deploy cycle. The currently-active generation
-  # on the target runs the OLD sapohub-deploy binary, built before
-  # SapoHub-2.0 commit 83da271 added GITHUB_TOKEN forwarding into
-  # nixos-rebuild — so it can't yet authenticate the private
-  # PersonalModules fetch (chicken-and-egg: the fix has to land and
-  # become the ACTIVE generation before it can be used). This deploy
-  # exists purely to get that fix active; the next commit re-adds
-  # personal-modules once it is.
-  outputs = { self, sapohub, ... }:
+  outputs = { self, sapohub, personal-modules, ... }:
     let
       system = "x86_64-linux";
       nixpkgs = sapohub.inputs.nixpkgs;
@@ -32,6 +30,8 @@
       modules = [
         sapohub.sapohubModules.my_plate
         sapohub.sapohubModules.storage
+        personal-modules.sapohubModules.magic_proxies
+        personal-modules.sapohubModules.youtube_download
       ];
       depsHash = "sha256-xNO7J5/zhUsQF2Wu1uhuemj0GnjXc77fG4i4pADTx9w=";
       npmDepsHash = "sha256-iHOJ/cXZOsPeEnKaDBYbEj7ClLpJ5hbmrZwnLmTvrdU=";
