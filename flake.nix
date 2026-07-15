@@ -71,6 +71,12 @@
           # DB always stores/queries UTC — this only affects how times
           # render in the UI (statusline clock, deploy timestamps, etc).
           { services.sapohub.timezone = "America/Los_Angeles"; }
+          {
+            services.sapohub.gitIdentity = {
+              name = "Nicholas Brown";
+              email = "sapodorado@proton.me";
+            };
+          }
         ];
       };
 
@@ -104,6 +110,10 @@
             assistant.claudePackage = lib.mkDefault flakePkgs.claude-code;
 
             timezone = lib.mkDefault "America/Los_Angeles";
+            gitIdentity = {
+              name = lib.mkDefault "Nicholas Brown";
+              email = lib.mkDefault "sapodorado@proton.me";
+            };
             # Off by default here (an existing machine keeps its own
             # networking) — opt in explicitly if wanted:
             #   tailscale.enable = lib.mkDefault true;
