@@ -102,7 +102,7 @@
             package = lib.mkDefault built.package;
             cliPackage = lib.mkDefault built.cli;
             assistant.claudePackage = lib.mkDefault flakePkgs.claude-code;
-            prefs = lib.mapAttrs (_: lib.mkDefault) prefs;
+
             timezone = lib.mkDefault "America/Los_Angeles";
             # Off by default here (an existing machine keeps its own
             # networking) — opt in explicitly if wanted:
