@@ -1,5 +1,6 @@
-# Personal SapoHub config — my_plate, storage, and the personal-modules
-# repo's magic_proxies + youtube_download, everything else default.
+# Personal SapoHub config — my_plate, storage, projects, reminders, and
+# the personal-modules repo's magic_proxies + youtube_download,
+# everything else default.
 #
 # Bootstrap a machine with:
 #   <path-to-SapoHub-2.0>/scripts/bootstrap.sh <ip> --hostname <name> --flake-path .
@@ -8,7 +9,7 @@
 # gets its own hardware/<hostname>-{hardware-configuration,disk-device}.nix,
 # generated on first bootstrap.
 {
-  description = "My SapoHub config — my_plate, storage, magic_proxies, youtube_download";
+  description = "My SapoHub config — my_plate, storage, projects, reminders, magic_proxies, youtube_download";
 
   inputs = {
     sapohub.url = "github:Sapo-Dorado/SapoHub-2.0";
@@ -30,6 +31,8 @@
       modules = [
         sapohub.sapohubModules.my_plate
         sapohub.sapohubModules.storage
+        sapohub.sapohubModules.projects
+        sapohub.sapohubModules.reminders
         personal-modules.sapohubModules.magic_proxies
         personal-modules.sapohubModules.youtube_download
       ];
