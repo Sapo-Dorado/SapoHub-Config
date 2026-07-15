@@ -77,6 +77,12 @@
               email = "sapodorado@proton.me";
             };
           }
+          {
+            services.sapohub = {
+              deploy.repoUrl = "https://github.com/Sapo-Dorado/SapoHub-Config";
+              assistant.browser.enable = true;
+            };
+          }
         ];
       };
 
@@ -114,6 +120,8 @@
               name = lib.mkDefault "Nicholas Brown";
               email = lib.mkDefault "sapodorado@proton.me";
             };
+            deploy.repoUrl = lib.mkDefault "https://github.com/Sapo-Dorado/SapoHub-Config";
+            assistant.browser.enable = lib.mkDefault true;
             # Off by default here (an existing machine keeps its own
             # networking) — opt in explicitly if wanted:
             #   tailscale.enable = lib.mkDefault true;
