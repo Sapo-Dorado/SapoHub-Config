@@ -25,8 +25,10 @@ who owns the disk/filesystem/bootloader config.
    ```
    Paste the reported hash in, repeat for the second one if it also
    mismatches.
-3. Prepare a `SECRET_KEY_BASE` (or let the bootstrap script generate one
-   for you — see below) for `/etc/sapohub/secrets.env` on the target.
+3. Prepare a `SECRET_KEY_BASE` for `/etc/sapohub/secrets.env` on the
+   target. The bootstrap script generates and seeds this automatically
+   for fresh machines (Path 1). For an existing NixOS box (Path 2) you
+   do it once by hand — see below.
 
 ## Path 1: fresh machine (nixos-anywhere)
 
@@ -81,8 +83,20 @@ package) is already wired up by this repo's module and SapoHub-2.0's own
 defaults. Any of it can still be overridden by setting
 `services.sapohub.*` directly in your config, same as always.
 
+Before running `nixos-rebuild switch`, create the secrets file on the
+target machine (the bootstrap script does this for Path 1, but for an
+existing box you do it once by hand):
+
+```sh
+sudo mkdir -p /etc/sapohub
+sudo sh -c 'echo "SECRET_KEY_BASE=$(openssl rand -hex 64)" > /etc/sapohub/secrets.env'
+sudo chmod 600 /etc/sapohub/secrets.env
+```
+
 Then `nixos-rebuild switch --flake .#<your-host>` however you normally
-deploy your own config.
+deploy your own config. Any other secrets (e.g. `GITHUB_TOKEN`) can be
+added to `/etc/sapohub/secrets.env` later via `sapohub-set-secret` or
+the Settings UI.
 
 ## Updating
 
