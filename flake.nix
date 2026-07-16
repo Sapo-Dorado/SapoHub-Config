@@ -26,7 +26,14 @@
     let
       system = "x86_64-linux";
       nixpkgs = sapohub.inputs.nixpkgs;
+      lib = nixpkgs.lib;
       claude-code-nix = sapohub.inputs.claude-code-nix;
+
+      # Machine-owned, written by `sapohub-deploy --sync-prefs` into
+      # .sapohub/sapohub-prefs.nix at this repo's own root (see
+      # nix/deploy-script.nix in SapoHub-2.0). No stub needs to exist up
+      # front — pathExists just skips it until the first sync has run.
+      prefsImport = lib.optional (builtins.pathExists ./.sapohub/sapohub-prefs.nix) ./.sapohub/sapohub-prefs.nix;
 
       modules = [
         sapohub.sapohubModules.my_plate
@@ -41,23 +48,6 @@
 
       sshKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJDOm17LfZVvLbzE+buuBRtK3FVQsBul2R4C+zLE+HSK sapo-hub";
 
-      # Explicit, hand-written prefs — single source of truth, referenced
-      # by both nixosConfigurations.<host> below and nixosModules.default.
-      # Wins over anything synced into sapohub-prefs.nix from the Settings
-      # UI (that file's values are wrapped in lib.mkDefault by
-      # `sapohub-deploy --sync-prefs`).
-      prefs = {
-        # "preview" is My Plate's one non-default dashboard_buttons option
-        # (MyPlateWeb.TaskPreview); leaving this unset falls back to the
-        # module's built-in icon+title default tile.
-        "dashboard_button.my_plate" = "preview";
-        # Only show My Plate's "due today" count in the statusline —
-        # drops the built-in core.scheduler/core.snapshot items. Unset
-        # would fall back to showing every item (see
-        # SapoCore.Statusline for the full fallback rule).
-        "statusline_order" = "my_plate.due";
-      };
-
       hosts = {
         test = { };
       };
@@ -66,8 +56,6 @@
         inherit hostname sshKey system modules depsHash npmDepsHash;
         hardwareDir = ./hardware;
         extraNixosModules = [
-          ./sapohub-prefs.nix
-          { services.sapohub.prefs = prefs; }
           # DB always stores/queries UTC — this only affects how times
           # render in the UI (statusline clock, deploy timestamps, etc).
           { services.sapohub.timezone = "America/Los_Angeles"; }
@@ -84,7 +72,7 @@
               assistant.browser.enable = true;
             };
           }
-        ];
+        ] ++ prefsImport;
       };
 
       built = sapohub.lib.mkSapoHub { inherit system modules depsHash npmDepsHash; };
@@ -123,7 +111,13 @@
           };
         in
         {
-          imports = [ sapohub.nixosModules.default ./sapohub-prefs.nix ];
+          # No .sapohub/sapohub-prefs.nix import here — that file (and its
+          # `sapohub-deploy --sync-prefs` sync) belongs to whichever repo is
+          # actually deploy.flakePath for a given deployment. For anyone
+          # importing this bundle, that's THEIR own outer flake checkout,
+          # not this one — see `prefsImport` above for how this repo's own
+          # `hosts.test` wires up its own copy.
+          imports = [ sapohub.nixosModules.default ];
           services.sapohub = {
             enable = lib.mkDefault true;
             package = lib.mkDefault built.package;

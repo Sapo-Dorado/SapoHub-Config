@@ -141,5 +141,5 @@ the Settings UI.
 Once deployed (either path), `/etc/sapohub-config` on the target is a
 checkout of this repo (`services.sapohub.deploy.flakePath`). SSH in and
 run `sapohub-deploy`, or use the Settings page's Deploy button (which
-also syncs UI preferences from Settings back into `sapohub-prefs.nix`
-here).
+also syncs UI preferences from Settings back into
+`.sapohub/sapohub-prefs.nix` here).
