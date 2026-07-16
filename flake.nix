@@ -80,6 +80,7 @@
           {
             services.sapohub = {
               deploy.repoUrl = "https://github.com/Sapo-Dorado/SapoHub-Config";
+              deploy.updateInputNames = [ "sapohub" "personal-modules" ];
               assistant.browser.enable = true;
             };
           }
