@@ -70,25 +70,48 @@ inputs.sapohub-config.url = "github:Sapo-Dorado/SapoHub-Config";
 # in your existing nixosConfigurations.<your-host>
 modules = [
   sapohub-config.nixosModules.default
-  { services.sapohub.deploy.flakeAttr = "<your-host>"; }
+  {
+    services.sapohub.deploy = {
+      flakeAttr = "<your-host>";
+      # This repo (SapoHub-Config) is just a dependency you're
+      # importing here — YOUR flake is the outermost one with a real
+      # nixosConfigurations.<your-host>, so it's what sapohub-deploy
+      # must clone/pull/rebuild. Point this at your own repo, not
+      # SapoHub-Config's — sapohub-deploy would otherwise clone/rebuild
+      # THIS repo, which doesn't define your host at all.
+      repoUrl = "https://github.com/you/your-config-repo";
+      # sapohub-config's own pin on SapoHub-2.0 lives in ITS flake.lock,
+      # not yours — nix's lockfile model keeps a transitive pin as an
+      # override entry in the CONSUMING flake (yours). Reach through it
+      # with a dotted path so a plain redeploy still bumps SapoHub-2.0:
+      updateInputNames = [ "sapohub-config/sapohub" ];
+    };
+  }
   # ...your existing modules (fileSystems, boot.loader, hardware, etc.)
 ];
 ```
 
-`deploy.flakeAttr` is the one thing you must set yourself — it has to
-match whatever you called your own `nixosConfigurations` attribute, so
-there's no way for the module to guess it. Everything else (module
-selection, secrets path, deploy target path, the unfree `claude-code`
-package) is already wired up by this repo's module and SapoHub-2.0's own
-defaults. Any of it can still be overridden by setting
+`deploy.flakeAttr` and `deploy.repoUrl` are the two things you must set
+yourself — `flakeAttr` has to match whatever you called your own
+`nixosConfigurations` attribute, and `repoUrl` has to point at your own
+repo, not this one (neither has a default here on purpose, for exactly
+this reason — a previous version of this module set `repoUrl` as a
+`mkDefault` pointing at itself, which silently broke the very first
+real consumer that imported it: `deploy.repoUrl` inherited THIS repo's
+URL instead of theirs, and `sapohub-deploy` cloned/rebuilt the wrong
+flake). Everything else (module selection, secrets path, the unfree
+`claude-code` package) is already wired up by this repo's module and
+SapoHub-2.0's own defaults, and can still be overridden by setting
 `services.sapohub.*` directly in your config, same as always.
+`assistant.browser.enable` similarly isn't set by this module for the
+same reason — add it yourself, alongside the block above, if you want
+it.
 
 The recommended networking options for an existing box are Tailscale +
-HTTPS nginx — add them alongside `deploy.flakeAttr`:
+HTTPS nginx — add them alongside the block above:
 
 ```nix
-{ services.sapohub.deploy.flakeAttr = "<your-host>";
-  services.sapohub.tailscale.enable = true;
+{ services.sapohub.tailscale.enable = true;
   services.sapohub.nginx.https = true; }
 ```
 

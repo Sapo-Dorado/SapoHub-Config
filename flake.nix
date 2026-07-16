@@ -99,6 +99,20 @@
       # own module. `deploy.flakeAttr` has no universal default (it's
       # whatever the importing config calls its own host), so the
       # importing config still needs to set that one directly.
+      #
+      # Deliberately does NOT set deploy.repoUrl or
+      # assistant.browser.enable, even as mkDefault — those describe how
+      # to deploy/run THIS repo itself (used by its own `hosts.test`
+      # below), not something a config importing this module as a
+      # dependency should silently inherit. A previous version set both
+      # here, and a real consumer (a separate personal nixos flake that
+      # imports this module for its own nixosConfigurations.nixos) picked
+      # up deploy.repoUrl pointing at THIS repo instead of its own —
+      # sapohub-deploy then cloned/rebuilt the wrong flake entirely,
+      # since this repo doesn't define nixosConfigurations.nixos. Every
+      # consumer must set deploy.repoUrl (and assistant.browser.enable,
+      # if wanted) explicitly, exactly like deploy.flakeAttr already
+      # forces them to.
       nixosModules.default = { pkgs, lib, ... }:
         let
           flakePkgs = import nixpkgs {
@@ -120,8 +134,6 @@
               name = lib.mkDefault "Nicholas Brown";
               email = lib.mkDefault "sapodorado@proton.me";
             };
-            deploy.repoUrl = lib.mkDefault "https://github.com/Sapo-Dorado/SapoHub-Config";
-            assistant.browser.enable = lib.mkDefault true;
             # Off by default here (an existing machine keeps its own
             # networking) — opt in explicitly if wanted:
             #   tailscale.enable = lib.mkDefault true;
