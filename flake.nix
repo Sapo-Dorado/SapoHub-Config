@@ -56,6 +56,12 @@
       mkHost = hostname: _hostArgs: sapohub.lib.mkFreshMachine {
         inherit hostname sshKey system modules depsHash npmDepsHash;
         hardwareDir = ./hardware;
+        # Wires straight into services.sapohub.deploy.repoUrl inside
+        # mkFreshMachine's own module — must NOT also be set from
+        # extraNixosModules below, or the two hard (non-mkDefault)
+        # assignments conflict and NixOS refuses to evaluate ("defined
+        # both null and not null").
+        configRepoUrl = "https://github.com/Sapo-Dorado/SapoHub-Config";
         extraNixosModules = [
           # DB always stores/queries UTC — this only affects how times
           # render in the UI (statusline clock, deploy timestamps, etc).
@@ -68,7 +74,6 @@
           }
           {
             services.sapohub = {
-              deploy.repoUrl = "https://github.com/Sapo-Dorado/SapoHub-Config";
               deploy.updateInputNames = [ "sapohub" "personal-modules" ];
               assistant.browser.enable = true;
             };
