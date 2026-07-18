@@ -1,10 +1,11 @@
 # sapohub-config
 
 My personal SapoHub deployment config. Modules enabled: `my_plate`
-(todo), `storage`, and `magic_proxies` + `youtube_download` from the
-private [PersonalModules](https://github.com/Sapo-Dorado/PersonalModules)
-repo — everything else is [SapoHub-2.0](https://github.com/Sapo-Dorado/SapoHub-2.0)'s
-defaults.
+(todo), `storage`, `recipes`, and `magic_proxies` + `youtube_download`
+from the private
+[PersonalModules](https://github.com/Sapo-Dorado/PersonalModules) repo
+— everything else is
+[SapoHub-2.0](https://github.com/Sapo-Dorado/SapoHub-2.0)'s defaults.
 
 There are two ways to deploy this: bootstrap a fresh machine from
 scratch (script-driven, wipes the target disk), or import this repo's
