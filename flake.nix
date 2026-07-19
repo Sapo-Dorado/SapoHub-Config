@@ -1,5 +1,5 @@
 # Personal SapoHub config — my_plate, storage, projects, reminders,
-# recipes, and the personal-modules repo's magic_proxies +
+# recipes, skills, and the personal-modules repo's magic_proxies +
 # youtube_download, everything else default.
 #
 # Bootstrap a machine with:
@@ -9,7 +9,7 @@
 # gets its own hardware/<hostname>-{hardware-configuration,disk-device}.nix,
 # generated on first bootstrap.
 {
-  description = "My SapoHub config — my_plate, storage, projects, reminders, recipes, magic_proxies, youtube_download";
+  description = "My SapoHub config — my_plate, storage, projects, reminders, recipes, skills, magic_proxies, youtube_download";
 
   inputs = {
     sapohub.url = "github:Sapo-Dorado/SapoHub-2.0";
@@ -41,6 +41,7 @@
         sapohub.sapohubModules.projects
         sapohub.sapohubModules.reminders
         sapohub.sapohubModules.recipes
+        sapohub.sapohubModules.skills
         personal-modules.sapohubModules.magic_proxies
         personal-modules.sapohubModules.youtube_download
       ];
