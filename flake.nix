@@ -1,6 +1,6 @@
 # Personal SapoHub config — my_plate, storage, projects, reminders,
 # recipes, skills, and the personal-modules repo's magic_proxies +
-# youtube_download, everything else default.
+# youtube_download + amex_rewards, everything else default.
 #
 # Bootstrap a machine with:
 #   <path-to-SapoHub-2.0>/scripts/bootstrap.sh <ip> --hostname <name> --flake-path .
@@ -9,7 +9,7 @@
 # gets its own hardware/<hostname>-{hardware-configuration,disk-device}.nix,
 # generated on first bootstrap.
 {
-  description = "My SapoHub config — my_plate, storage, projects, reminders, recipes, skills, magic_proxies, youtube_download";
+  description = "My SapoHub config — my_plate, storage, projects, reminders, recipes, skills, magic_proxies, youtube_download, amex_rewards";
 
   inputs = {
     sapohub.url = "github:Sapo-Dorado/SapoHub-2.0";
@@ -44,6 +44,7 @@
         sapohub.sapohubModules.skills
         personal-modules.sapohubModules.magic_proxies
         personal-modules.sapohubModules.youtube_download
+        personal-modules.sapohubModules.amex_rewards
       ];
       depsHash = "sha256-xNO7J5/zhUsQF2Wu1uhuemj0GnjXc77fG4i4pADTx9w=";
       npmDepsHash = "sha256-iHOJ/cXZOsPeEnKaDBYbEj7ClLpJ5hbmrZwnLmTvrdU=";
